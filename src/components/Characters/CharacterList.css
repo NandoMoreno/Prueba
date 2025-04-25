@@ -9,6 +9,11 @@
   margin-bottom: 0.5rem;
 }
 
+.character-list-container h2 {
+  margin-bottom: 1rem; /* o más, prueba 1.5rem o 2rem si quieres más separación */
+}
+
+
 .search-container {
   margin-bottom: 1rem;
 }
@@ -79,6 +84,26 @@
   font-size: 0.9rem;
 }
 
+.character-detail {
+  text-align: center;
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+.character-detail img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.character-detail ul {
+  text-align: left;
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
 .loading, .error, .no-results {
   text-align: center;
   padding: 2rem;
@@ -110,4 +135,11 @@
   .character-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.filter-select {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
 }

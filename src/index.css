@@ -69,3 +69,14 @@ button:focus-visible {
 input, button, textarea, select {
   font: inherit;
 }
+
+body.dark {
+  background-color: #121212;
+  color: white;
+}
+
+body {
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
+}

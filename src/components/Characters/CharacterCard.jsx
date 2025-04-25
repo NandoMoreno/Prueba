@@ -1,9 +1,16 @@
-function CharacterCard({ character }) {
+import { useNavigate } from 'react-router-dom';
+
+function CharacterCard({ character, index }) {
+  const navigate = useNavigate();
   const { name, images, species } = character;
   const fullName = `${name.first} ${name.middle || ''} ${name.last}`.trim();
-  
+
   return (
-    <div className="character-card">
+    <div
+      className="character-card"
+      onClick={() => navigate(`/characters/${index}`)}
+      style={{ cursor: 'pointer' }}
+    >
       <div className="character-image">
         <img 
           src={images.main} 

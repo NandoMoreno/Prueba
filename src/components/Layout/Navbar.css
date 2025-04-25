@@ -71,3 +71,26 @@
     justify-content: space-around;
   }
 }
+
+.user-menu {
+  position: relative;
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.username {
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  z-index: 10;
+}

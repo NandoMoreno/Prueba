@@ -1,79 +1,58 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import CharacterCard from './CharacterCard';
 import './CharacterList.css';
 
 function CharacterList() {
   const [characters, setCharacters] = useState([]);
   const [filteredCharacters, setFilteredCharacters] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [selectedSpecies, setSelectedSpecies] = useState(() => {
+    return localStorage.getItem('selectedSpecies') || 'all';
+  });
 
   useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch('https://api.sampleapis.com/futurama/characters');
-        
-        if (!response.ok) {
-          throw new Error('Error al obtener los personajes');
-        }
-        
-        const data = await response.json();
+    fetch('https://api.sampleapis.com/futurama/characters')
+      .then((res) => res.json())
+      .then((data) => {
         setCharacters(data);
-        setFilteredCharacters(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchCharacters();
+      });
   }, []);
 
   useEffect(() => {
-    const results = characters.filter(character =>
-      character.name.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      character.name.last.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCharacters(results);
-  }, [searchTerm, characters]);
+    localStorage.setItem('selectedSpecies', selectedSpecies);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  if (loading) {
-    return <div className="loading">Cargando personajes...</div>;
-  }
-
-  if (error) {
-    return <div className="error">Error: {error}</div>;
-  }
+    if (selectedSpecies === 'all') {
+      setFilteredCharacters(characters);
+    } else {
+      const filtered = characters.filter(
+        (char) =>
+          char.species &&
+          char.species.toLowerCase().includes(selectedSpecies.toLowerCase())
+      );
+      setFilteredCharacters(filtered);
+    }
+  }, [selectedSpecies, characters]);
 
   return (
-    <div className="character-container">
-      <h1>Personajes de Futurama</h1>
-      
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar personaje por nombre"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-input"
-        />
+    <div className="character-list-container">
+      <h2>Personajes</h2>
+
+      {/* Filtro por especie */}
+      <select
+        value={selectedSpecies}
+        onChange={(e) => setSelectedSpecies(e.target.value)}
+        className="filter-select"
+      >
+        <option value="all">Todos</option>
+        <option value="human">Human</option>
+        <option value="robot">Robot</option>
+        <option value="alien">Alien</option>
+      </select>
+
+      <div className="character-grid">
+        {filteredCharacters.map((char, index) => (
+          <CharacterCard key={index} character={char} index={index} />
+        ))}
       </div>
-      
-      {filteredCharacters.length === 0 ? (
-        <div className="no-results">No se encontraron personajes con ese nombre</div>
-      ) : (
-        <div className="character-grid">
-          {filteredCharacters.map(character => (
-            <CharacterCard key={character.id} character={character} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

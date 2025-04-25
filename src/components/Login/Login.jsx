@@ -8,14 +8,13 @@ function Login({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!username.trim() || !password.trim()) {
-      setError('Por favor, completa todos los campos');
-      return;
+
+    if (username.trim()) {
+      localStorage.setItem('username', username);
+      onLogin();
+    } else {
+      setError('Por favor, ingresa un nombre de usuario válido.');
     }
-    
-    // Simple validation passed, call the onLogin callback
-    onLogin();
   };
 
   return (
@@ -23,10 +22,10 @@ function Login({ onLogin }) {
       <div className="login-card">
         <h1>Bienvenido</h1>
         <p className="login-subtitle">Ingresa tus credenciales para continuar</p>
-        
+
         <form onSubmit={handleSubmit} className="login-form">
           {error && <div className="error-message">{error}</div>}
-          
+
           <div className="form-group">
             <label htmlFor="username">Usuario</label>
             <input
@@ -35,9 +34,11 @@ function Login({ onLogin }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Ingresa tu usuario"
+              name="username"
+              required
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
             <input
@@ -48,7 +49,7 @@ function Login({ onLogin }) {
               placeholder="Ingresa tu contraseña"
             />
           </div>
-          
+
           <button type="submit" className="login-button">
             Iniciar Sesión
           </button>
